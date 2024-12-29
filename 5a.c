@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <ctype.h>
+#include<math.h>
 #define MAX 100
 int stack[MAX];
 int top = -1;
