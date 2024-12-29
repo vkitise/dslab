@@ -1,81 +1,40 @@
 #include <stdio.h>
 #include <ctype.h>
-#include <math.h>
-#include <stdlib.h>
-#define MAX 20
-float stack[MAX];
+#define MAX 100
+int stack[MAX];
 int top = -1;
-float eval_postfix(char[]);
-void push(float);
-float pop();
+void push(int num) {
+    stack[++top] = num;
+}
+int pop() {
+    return stack[top--];
+}
+int evaluatePostfix(char* exp) {
+    for (int i = 0; exp[i] != '\0'; i++) {
+        char ch = exp[i];
+        if (isdigit(ch)) {
+            push(ch - '0'); 
+        } 
+        else {
+            int b = pop();
+            int a = pop();
+
+            switch (ch) {
+                case '+': push(a + b); break;
+                case '-': push(a - b); break;
+                case '*': push(a * b); break;
+                case '/': push(a / b); break;
+                case '^': push(pow(a, b));break;
+            }
+        }
+    }
+    return pop();
+}
 int main() {
-char postfix[MAX];
-float result;
-printf("Enter postfix expression: ");
-scanf("%s", postfix);
-result = eval_postfix(postfix);
-if (top == -1) {
-printf("Result: %f\n", result);
-} else {
-printf("Not a valid expression\n");
-}
-return 0;
-}
-float eval_postfix(char postfix[]) {
-int i = 0, k;
-char ch;
-float op1, op2, res;
-while (postfix[i] != '\0') {
-ch = postfix[i];
-if (isdigit(ch)) {
-k = ch - '0';
-push(k);
-} else {
-op2 = pop();
-op1 = pop();
-switch (ch) {
-case '+':
-push(op1 + op2);
-break;
-case '-':
-push(op1 - op2);
-break;
-case '*':
-push(op1 * op2);
-break;
-case '/':
-push(op1 / op2);
-break;
-case '^':
-push(pow(op1, op2));
-break;
-default:
-printf("Illegal operator\n");
-exit(0);
-}
-}
-i++;
-}
-res = pop();
-return res;
-}
-void push(float num) {
-if (top == MAX - 1) {
-printf("Stack overflow\n");
-exit(0);
-} else {
-top++;
-stack[top] = num;
-}
-}
-float pop() {
-float num;
-if (top == -1) {
-printf("Stack underflow\n");
-exit(0);
-} else {
-num = stack[top];
-top--;
-return num;
-}
+    char exp[MAX];
+    printf("Enter a postfix expression: ");
+    scanf("%s", exp);
+    int result = evaluatePostfix(exp);
+    printf("Result: %d\n", result);
+    return 0;
 }
