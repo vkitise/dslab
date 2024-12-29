@@ -34,7 +34,7 @@ int main() {
         } else if (ch == ')') {
             while (stack[top] != '(') 
                 postfix[k++] = pop();
-            pop(); // Remove '(' from stack
+            pop(); 
         } else {
             while (precedence(stack[top]) >= precedence(ch)) 
                 postfix[k++] = pop();
